@@ -21,6 +21,7 @@ import com.jmm.capital.model.AgencyModel;
 import com.jmm.capital.model.ProductModel;
 import com.jmm.capital.model.ProductPurchase;
 import com.jmm.capital.repo.ProductPurchaseRepo;
+import com.jmm.capital.util.DateTimeUtility;
 
 /**
  * @author ramjisoni
@@ -45,7 +46,7 @@ public class ProductPurchaseService {
 		ProductPurchase productPurchaseModel = null;
 		logger.info("Started ProductPurchaseService.getPurchaseInfoById with id " + id);
 		try {
-			ObjectId ids = new ObjectId(id);
+			//ObjectId ids = new ObjectId(id);
 			// ProductPurchase product = repo.findBy_id(ids);
 			Optional<ProductPurchase> product = repo.findById(id);
 			// System.out.println("sddssd" + product.get().getBarCodeId());
@@ -68,25 +69,19 @@ public class ProductPurchaseService {
 	 * 
 	 * @return
 	 */
-	public ProductPurchase getPurchaseInfoByDate(Date date) {
-		ProductPurchase productPurchaseModel = null;
-		logger.info("Started ProductPurchaseService.getPurchaseInfoByDate with id " + date);
+	public List<ProductPurchase> getPurchaseInfoByDate(Date billingDate) {
+		List<ProductPurchase> product = new ArrayList<>();
+		String billingString = "2019-09-10T21:27:08-04:00";
+		billingDate = DateTimeUtility.stringToDate(billingString);
+		logger.info("Started ProductPurchaseService.getPurchaseInfoByDate with id " + billingDate);
 		try {
-			/*
-			 * ObjectId ids = new ObjectId(id); // ProductPurchase product =
-			 * repo.findBy_id(ids); Optional<ProductPurchase> product = repo.findById(id);
-			 * // System.out.println("sddssd" + product.get().getBarCodeId());
-			 * 
-			 * if (product.isPresent()) { productPurchaseModel = product.get(); } else {
-			 * throw new ParlourServiceException("No Purchase Record found on this id"); }
-			 */
-
+			product = repo.getPurchaseInfoByDateandProductId(billingDate);
 		} catch (Exception ex) {
 			throw new ParlourServiceException(
 					"Exception Found in ProductPurchaseService.getPurchaseInfoByDate " + ex.getMessage());
 		}
-		logger.info("Completed ProductPurchaseService.getPurchaseInfoByDate with id " + date);
-		return productPurchaseModel;
+		logger.info("Completed ProductPurchaseService.getPurchaseInfoByDate with id " + billingDate);
+		return product;
 	}
 
 	/**
@@ -158,10 +153,24 @@ public class ProductPurchaseService {
 
 	/**
 	 * 
+	 * @param productPurchase
 	 * @return
 	 */
-	public boolean updatePurchaseInfo() {
-		return true;
+	public boolean updatePurchaseInfo(final ProductPurchase productPurchase) {
+
+		logger.info("Starting ProductPurchaseService.updatePurchaseInfo");
+		boolean result = false;
+		try {
+			// TODO Validation needed
+			repo.save(productPurchase);
+			result = true;
+		} catch (Exception ex) {
+			logger.error("Exception found to update Purchase Info " + ex.getMessage());
+			throw new ParlourServiceException("Exception found to update Purchase Info " + ex.getMessage());
+		}
+		logger.info("Completed ProductPurchaseService.updatePurchaseInfo");
+		return result;
+
 	}
 
 	/**
@@ -179,5 +188,47 @@ public class ProductPurchaseService {
 		}
 		logger.info("Completed ProductPurchaseService.deletePurchaseInfo by Id " + id);
 		return deleted;
+	}
+
+	/**
+	 * 
+	 * @param billingDate
+	 * @param productId
+	 * @return
+	 */
+	public List<ProductPurchase> getPurchaseInfoByDateAndProductId(final Date billingDate, final Long productId) {
+		logger.info("Starting ProductPurchaseService.getPurchaseInfoByDateAndProductId with purchase Date "
+				+ billingDate + " and ProductId" + productId);
+		List<ProductPurchase> productInfos = new ArrayList<>();
+		try {
+			productInfos = repo.getPurchaseInfoByDateandProductId(billingDate);
+		} catch (Exception ex) {
+			logger.error(
+					"Exception found in ProductPurchaseService.getPurchaseInfoByDateAndProductId " + ex.getMessage());
+			throw new ParlourServiceException(
+					"Exception found in ProductPurchaseService.getPurchaseInfoByDateAndProductId " + ex.getMessage());
+		}
+		logger.info("Completed PurchaseProductService.getPurchaseInfoByDateAndProductId with billDate " + billingDate);
+		return productInfos;
+	}
+
+	/**
+	 * 
+	 * @param productPurchase
+	 * @return
+	 */
+	public boolean savePurchaseInfo(final ProductPurchase productPurchase) {
+		logger.info("Starting ProductPurchaseService.savePurchaseInfo");
+		boolean result = false;
+		try {
+			// TODO Validation needed
+			repo.save(productPurchase);
+			result = true;
+		} catch (Exception ex) {
+			logger.error("Exception found to save Purchase Info " + ex.getMessage());
+			throw new ParlourServiceException("Exception found to save Purchase Info " + ex.getMessage());
+		}
+		logger.info("Completed ProductPurchaseService.savePurchaseInfo");
+		return result;
 	}
 }

@@ -3,6 +3,7 @@
  */
 package com.jmm.capital.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -83,6 +85,35 @@ public class ProductPurchaseController {
 	public ResponseEntity<List<ProductPurchase>> getPurchaseInfoByAgencyId(@RequestParam("agencyid")Long agencyid) {
 		logger.info("Starting ProductPurchaseController.getpurchaseinfobyagencyid");
 		List<ProductPurchase> product = productService.getPurchaseInfoByAgencyId(agencyid);
+		ResponseEntity<List<ProductPurchase>> result = new ResponseEntity<List<ProductPurchase>>(product, HttpStatus.OK);
+		logger.info("Starting ProductPurchaseController.getpurchaseinfobyagencyid");
+		return result;
+	}
+	
+	
+	/**
+	 * 
+	 * @param productId
+	 * @return
+	 */
+	@GetMapping(value = "/product/purchase/getpurchaseinfobydate")
+	public ResponseEntity<List<ProductPurchase>> getPurchaseInfoByDate() {
+		logger.info("Starting ProductPurchaseController.getpurchaseinfobyagencyid");
+		List<ProductPurchase> product = productService.getPurchaseInfoByDate(new Date());
+		ResponseEntity<List<ProductPurchase>> result = new ResponseEntity<List<ProductPurchase>>(product, HttpStatus.OK);
+		logger.info("Starting ProductPurchaseController.getpurchaseinfobyagencyid");
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @param productId
+	 * @return
+	 */
+	@PostMapping(value = "/product/purchase/savepurchase")
+	public ResponseEntity<List<ProductPurchase>> savePurchase(final ProductPurchase productPurchase) {
+		logger.info("Starting ProductPurchaseController.getpurchaseinfobyagencyid");
+		List<ProductPurchase> product = productService.getPurchaseInfoByDate(new Date());
 		ResponseEntity<List<ProductPurchase>> result = new ResponseEntity<List<ProductPurchase>>(product, HttpStatus.OK);
 		logger.info("Starting ProductPurchaseController.getpurchaseinfobyagencyid");
 		return result;

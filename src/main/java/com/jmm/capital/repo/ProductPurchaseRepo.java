@@ -3,8 +3,11 @@
  */
 package com.jmm.capital.repo;
 
-import org.bson.types.ObjectId;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 import com.jmm.capital.model.ProductPurchase;
 
@@ -14,5 +17,6 @@ import com.jmm.capital.model.ProductPurchase;
  */
 public interface ProductPurchaseRepo extends MongoRepository<ProductPurchase, String>{
 
-	ProductPurchase findBy_id(ObjectId _id);
+	@Query("{billDate : {$gt : ?0}}")
+	List<ProductPurchase> getPurchaseInfoByDateandProductId(Date purchasrDate);
 }
