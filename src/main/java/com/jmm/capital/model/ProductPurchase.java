@@ -5,16 +5,17 @@ package com.jmm.capital.model;
 
 import java.util.Date;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
 /**
  * @author ramjisoni
  *
  */
-public class ProductPurchaseModel {
+public class ProductPurchase {
 
 	@Id
-	private String id;
+	private ObjectId _id;
 
 	private ProductModel product;
 
@@ -34,18 +35,20 @@ public class ProductPurchaseModel {
 
 	private String barCodeId;
 
+	
+
 	/**
-	 * @return the id
+	 * @return the _id
 	 */
-	public final String getId() {
-		return id;
+	public final ObjectId get_id() {
+		return _id;
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param _id the _id to set
 	 */
-	public final void setId(String id) {
-		this.id = id;
+	public final void set_id(ObjectId _id) {
+		this._id = _id;
 	}
 
 	/**

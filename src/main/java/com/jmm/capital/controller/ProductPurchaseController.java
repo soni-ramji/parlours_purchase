@@ -3,23 +3,25 @@
  */
 package com.jmm.capital.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jmm.capital.model.ProductPurchaseModel;
+import com.jmm.capital.model.ProductPurchase;
 import com.jmm.capital.service.ProductPurchaseService;
 
 /**
  * @author ramjisoni
  *
  */
-@RestController("/product/purchase")
+@RestController
 public class ProductPurchaseController {
 
 	/**
@@ -34,13 +36,57 @@ public class ProductPurchaseController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(name = "/getpurchaseinfo", method = RequestMethod.GET)
-	public ResponseEntity<ProductPurchaseModel> getPurchaseInfoById(Long id) {
+	@GetMapping(value = "/product/purchase/getpurchaseinfo")
+	public ResponseEntity<ProductPurchase> getPurchaseInfoById(@RequestParam("id")String id) {
 		logger.info("Starting ProductPurchaseController.getPurchaseInfoById");
-		ProductPurchaseModel product = productService.getPurchaseInfoById(id);
-		ResponseEntity<ProductPurchaseModel> result = new ResponseEntity<ProductPurchaseModel>(product, HttpStatus.OK);
+		ProductPurchase product = productService.getPurchaseInfoById(id);
+		ResponseEntity<ProductPurchase> result = new ResponseEntity<ProductPurchase>(product, HttpStatus.OK);
 		logger.info("Starting ProductPurchaseController.getPurchaseInfoById");
 		return result;
 	}
+	
+	
+	
+	/**
+	 * 
+	 * @return
+	 */
+	@GetMapping(name  = "/product/purchase/getallpurchase")
+	public ResponseEntity<List<ProductPurchase>> getAllPurchase() {
+		logger.info("Starting ProductPurchaseController.getAllPurchase");
+		List<ProductPurchase> product = productService.getAllPurchaseInfo();
+		ResponseEntity<List<ProductPurchase>> result = new ResponseEntity<List<ProductPurchase>>(product, HttpStatus.OK);
+		logger.info("Starting ProductPurchaseController.getAllPurchase");
+		return result;
+	} 
+	
+	/**
+	 * 
+	 * @param productId
+	 * @return
+	 */
+	@GetMapping(value = "/product/purchase/getpurchaseinfobyproductid")
+	public ResponseEntity<List<ProductPurchase>> getPurchaseInfoByProductId(@RequestParam("productId")Long productId) {
+		logger.info("Starting ProductPurchaseController.getPurchaseInfoByProductId");
+		List<ProductPurchase> product = productService.getPurchaseInfoByProductId(productId);
+		ResponseEntity<List<ProductPurchase>> result = new ResponseEntity<List<ProductPurchase>>(product, HttpStatus.OK);
+		logger.info("Starting ProductPurchaseController.getPurchaseInfoByProductId");
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @param productId
+	 * @return
+	 */
+	@GetMapping(value = "/product/purchase/getpurchaseinfobyagencyid")
+	public ResponseEntity<List<ProductPurchase>> getPurchaseInfoByAgencyId(@RequestParam("agencyid")Long agencyid) {
+		logger.info("Starting ProductPurchaseController.getpurchaseinfobyagencyid");
+		List<ProductPurchase> product = productService.getPurchaseInfoByAgencyId(agencyid);
+		ResponseEntity<List<ProductPurchase>> result = new ResponseEntity<List<ProductPurchase>>(product, HttpStatus.OK);
+		logger.info("Starting ProductPurchaseController.getpurchaseinfobyagencyid");
+		return result;
+	}
+	
 
 }
